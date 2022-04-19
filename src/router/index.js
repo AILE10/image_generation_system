@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const home = () => import("../views/home.vue")    //懒加载
+const home = () => import("../views/Home.vue")    //懒加载
 const login = () => import("../views/login.vue")
 const register = () => import("../views/register.vue")
 
