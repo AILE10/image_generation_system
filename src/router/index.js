@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const home = () => import("../views/Home.vue")    //懒加载
 const login = () => import("../views/login.vue")
-const register = () => import("../views/register.vue")
+
 
 const routes = [
   {
@@ -21,11 +21,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: login
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: register
   },
 ]
 

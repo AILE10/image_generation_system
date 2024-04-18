@@ -2,21 +2,26 @@
   <div id="main">
     <el-container>
       <el-header>
-        <div class="logo" >
-          <img src="../assets/img/logo.png">  <!-- 此处请提前准备好图片 -->
+        <div class="name" >
+            欢迎使用图像生成系统
         </div>
         <div class="user">
           你好：{{username}}
         </div>
       </el-header>
-      <el-main></el-main>
-      <el-footer>Footer</el-footer>
+      <el-main>
+
+      </el-main>
+      <el-footer></el-footer>
     </el-container>
   </div>
 </template>
 
-
 <script>
+
+import * as THREE from "three";
+import FOG from "vanta/src/vanta.fog";
+
 export default {
   data () {
     return {
@@ -25,7 +30,7 @@ export default {
   },
   created() {
     this.username = this.$route.query.name;
-  },
+  }
 }
 </script>
 
@@ -33,11 +38,14 @@ export default {
 #main {
     width: 100%;
   }
-  .el-header, .el-footer {
-    background-color: #5e6f4d;
+  .el-header{
     color: #333;
-    text-align: center;
     line-height: 60px;
+  }
+  .el-main{
+      width: 100%;
+      height: 100vh;
+      background-image: url("../assets/img/background.jpg");
   }
   .el-footer {
     position: fixed;
@@ -55,8 +63,17 @@ export default {
   }
   .user {
     float: right;
-    color: #f7fffc;
+    color: #000000;
+    font-size: 22px;
+    margin-right: 50px;
+  }
+  .name{
+    float: left;
+    color: #000000;
     font-size: 22px;
     margin-right: 50px;
   }
 </style>
+
+
+
