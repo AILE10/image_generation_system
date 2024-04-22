@@ -1,6 +1,7 @@
 <template>
   <div class="body">
     <div class="main-box">
+
       <div :class="['container', 'container-register', { 'is-txl': isLogin }]">
         <form v-model="registerForm">
           <h2 class="title">注册</h2>
@@ -36,6 +37,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'Login',
   data() {
@@ -136,10 +139,12 @@ export default {
   align-items: center;
   font-family: "Montserrat", sans-serif;
   font-size: 12px;
-  background-image: url("../assets/img/background.jpg");
+  background-image: url("../assets/img/img.png");
+  background-size: cover;
   color: #a0a5a8;
 
 }
+
 .main-box {
   position: relative;
   width: 1000px;

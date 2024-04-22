@@ -1,79 +1,113 @@
 <template>
-  <div id="main">
-    <el-container>
-      <el-header>
-        <div class="name" >
-            欢迎使用图像生成系统
-        </div>
-        <div class="user">
+  <div id="building">
+   <el-container class="home-container">
+       <!--头部  -->
+       <el-header>
+           <div>
+<!--              <img src="../assets/img/background.jpg" alt="">-->
+              <span>图像生成系统</span>
+           </div>
+         <div class="user">
           你好：{{username}}
         </div>
-      </el-header>
-      <el-main>
+           <!-- 退出按钮 -->
+            <el-button type="info" @click="logout">退出</el-button>
+       </el-header>
+       <!-- 页面主体区  嵌套容器  包裹 Aside与Main -->
+       <el-container>
+             <!-- 左侧 -->
+             <el-aside width="200px">
 
-      </el-main>
-      <el-footer></el-footer>
-    </el-container>
+             </el-aside>
+             <!-- 主体 -->
+             <el-main>Main</el-main>
+       </el-container>
+
+
+   </el-container>
   </div>
 </template>
 
-<script>
+<script >
 
-import * as THREE from "three";
-import FOG from "vanta/src/vanta.fog";
-
-export default {
-  data () {
-    return {
-      username: ''
-    };
-  },
-  created() {
-    this.username = this.$route.query.name;
-  }
+export default{
+  name:'Home',
+    data () {
+      return {
+        username: ''
+      };
+    },
+    created() {
+      this.username = this.$route.query.name;
+    },
+   methods:{
+    // 退出操作
+    logout(){
+    // 清空token
+     window.sessionStorage.clear()
+    //  将登录页面转入到登录界面
+    this.$router.push('/login')
+    }
+   }
 }
 </script>
 
-<style scoped>
-#main {
-    width: 100%;
-  }
+
+<style scoped lang="less">
+    // 标签的名字就是类的名字
+   .home-container{
+    height: 100%;
+   }
   .el-header{
-    color: #333;
-    line-height: 60px;
+     background-color: #c4d9f6;
+     opacity: 0.25;
+     display: flex;
+     justify-content: space-between;
+     padding-left: 0px;
+    //  居中
+     align-items:center;
+    //  文本颜色
+    color: rgba(1, 42, 17, 0.96);
+    // 文字大小
+    font-size: 20px;
+
+    // 给header中嵌套的div进行样式改造
+    // 子代选择器
+    >div{
+      display:flex;
+    //   纵向居中
+      align-items:center;
+
+    //   在给div中的span改造样式
+       >span{
+        margin-left: 20px;
+       }
+    }
   }
+
+  .el-aside{
+    background: rgb(196, 217, 246);
+    opacity: 0.25;
+
+  }
+
   .el-main{
-      width: 100%;
-      height: 100vh;
-      background-image: url("../assets/img/background.jpg");
+    background-color: #EAEDF1;
+    width: 100%;
+    height: 100vh;
   }
-  .el-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  .logo {
-    float: left;
-    margin: 0 auto;
-  }
-  .logo img{
-    padding-top: 5px;
-    height: 50px;
-  }
-  .user {
+    .user {
     float: right;
-    color: #000000;
+    color: #043819;
     font-size: 22px;
     margin-right: 50px;
   }
-  .name{
-    float: left;
-    color: #000000;
-    font-size: 22px;
-    margin-right: 50px;
-  }
+
+#building{
+background:url("../assets/img/img.png");
+width:100%;			//大小设置为100%
+height:100%;			//大小设置为100%
+position:fixed;
+background-size:100% 100%;}
 </style>
-
-
 
