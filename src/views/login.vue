@@ -139,7 +139,7 @@ export default {
   align-items: center;
   font-family: "Montserrat", sans-serif;
   font-size: 12px;
-  background-image: url("../assets/img/img.png");
+  background-image: url("../assets/img/img_2.png");
   background-size: cover;
   color: #a0a5a8;
 

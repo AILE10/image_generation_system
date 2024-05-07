@@ -1,4 +1,4 @@
-let db = require('../db/index')
+let db = require('../db')
 
 exports.login = (req, res) => {
   var sql = 'select * from userinfo where username = ? and password = ?'

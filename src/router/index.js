@@ -6,6 +6,11 @@ Vue.use(VueRouter)
 const home = () => import("../views/Home.vue")    //懒加载
 const login = () => import("../views/login.vue")
 
+const gogh = () => import("../views/gogh.vue")
+
+const check = () => import("../views/check.vue")
+
+const ques = () => import("../views/ques.vue")
 
 const routes = [
   {
@@ -21,6 +26,21 @@ const routes = [
     path: '/login',
     name: 'login',
     component: login
+  },
+    {
+    path: '/check',
+    name: 'check',
+    component: check
+  },
+    {
+    path: '/ques',
+    name: 'ques',
+    component: ques
+  },
+    {
+    path: '/gogh',
+    name: 'gogh',
+    component: gogh
   },
 ]
 
