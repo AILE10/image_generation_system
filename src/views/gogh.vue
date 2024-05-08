@@ -66,59 +66,19 @@
               </template>
             </slide>
           </carousel-3d>
-          <div class="row">
-            <div class="col-8">
-              <label class="btn btn-default p-0">
-                <input
-                    ref="file"
-                    accept="image/*"
-                    type="file"
-                    @change="selectImage"
-                />
-              </label>
-            </div>
-            <div class="col-4">
-              <button
-                  :disabled="!currentImage"
-                  class="btn btn-success btn-sm float-right"
-                  @click="upload"
-              >
-                上传
-              </button>
-            </div>
-          </div>
-          <div v-if="currentImage" class="progress">
-            <div
-                :aria-valuenow="progress"
-                :style="{ width: progress + '%' }"
-                aria-valuemax="100"
-                aria-valuemin="0"
-                class="progress-bar progress-bar-info"
-                role="progressbar"
-            >
-              {{ progress }}%
-            </div>
-          </div>
-          <div v-if="previewImage">
-            <div>
-              <img :src="previewImage" alt="" class="preview my-3"/>
-            </div>
-          </div>
-          <div v-if="message" class="alert alert-secondary" role="alert">
-            {{ message }}
-          </div>
-          <div class="card mt-3">
-            <div class="card-header">图片列表</div>
-            <ul class="list-group list-group-flush">
-              <li
-                  v-for="(image, index) in imageInfos"
-                  :key="index"
-                  class="list-group-item"
-              >
-                <a :href="image.url">{{ image.name }}</a>
-              </li>
-            </ul>
-          </div>
+          <el-upload
+              :before-remove="beforeRemove"
+              :file-list="fileList"
+              :limit="5"
+              :on-exceed="handleExceed"
+              :on-remove="handleRemove"
+              :on-success="uploadSuccess"
+              action="http://localhost:80/api/hold/imgload"
+              class="upload-demo"
+              multiple>
+            <el-button size="huge" type="primary" >点击上传生成图像</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-main>
       </el-container>
     </el-container>
@@ -127,11 +87,9 @@
 
 <script>
 import {Carousel3d, Slide} from 'vue-carousel-3d'
-import UploadService from "../services/UploadFilesService";
 
 export default {
   name: 'gogh',
-
   components: {
     Carousel3d,
     Slide
@@ -139,10 +97,21 @@ export default {
   data() {
     return {
       username: '',
-      selectedFiles: undefined,
-      progressInfos: [],
-      message: "",
-      fileInfos: [],
+      fileList: [],//图片列表
+      form: {
+        num: 0,
+        title: '',
+        city: '',
+        exhibitionType: '',
+        extension: '',
+        businessHours: '',
+        location: '',
+        name: '',
+        number: '',
+        imgBanner: '',
+        img: [],
+        content: ''
+      },
       slides: [
         {
           src: 'https://c.wallhere.com/photos/21/60/1600x1200_px_artwork_blossoms_Classic_Art_painting_Vincent_Van_Gogh-843291.jpg!d',
@@ -162,18 +131,49 @@ export default {
       ]
     };
   },
-
   created() {
     this.username = this.$route.query.name;
   },
-  mounted() {
-    UploadService.getFiles().then(response => {
-      this.imageInfos = response.data;
-    });
-  },
   methods: {
-
     // 退出操作
+    //图片上传成功
+    uploadSuccess(res, file) {
+      //当上传的图片名为"banner.jpg"，则将图片路径赋给form.imgBanner，否则给form.img数组
+      if (res.data.name === "banner.jpg") { //我的banner图名字都叫banner.jpg
+        this.form.imgBanner = res.data.path
+      } else {
+        this.form.img.push(res.data.path)
+      }
+    },
+    //删除图片时
+    handleRemove(file, fileList) {
+      console.log(file, fileList, '1111111');
+      //删除图片时也要把form.imgBanner和form.img里的数据删除
+      if (file.name === "banner.jpg") {
+        this.form.imgBanner = ''
+      } else {
+        //给数组封装一个方法，用来删除数组中指定的数据
+        Array.prototype.contains = function (obj) {
+          var i = this.length;
+          while (i--) {
+            if (this[i] === obj) {
+              return i;  // 返回的这个 i 就是元素的索引下标，
+            }
+          }
+          return false;
+        }
+        const path = file.response.data.path
+        this.form.img.splice(this.form.img.contains(path), 1)
+        // console.log(this.form.img,'删除后的form.img')
+      }
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+
     logout() {
       // 清空token
       window.sessionStorage.clear()
@@ -209,32 +209,9 @@ export default {
           }
       )
 
-    },
-    selectImage() {
-      this.currentImage = this.$refs.file.files.item(0);
-      this.previewImage = URL.createObjectURL(this.currentImage);
-      this.progress = 0;
-      this.message = "";
-    },
-    upload() {
-      this.progress = 0;
-      UploadService.upload(this.currentImage, (event) => {
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      })
-          .then((response) => {
-            this.message = response.data.message;
-            return UploadService.getFiles();
-          })
-          .then((images) => {
-            this.imageInfos = images.data;
-          })
-          .catch((err) => {
-            this.progress = 0;
-            this.message = "Could not upload the image! " + err;
-            this.currentImage = undefined;
-          });
-    },
+    }
   }
+
 }
 </script>
 
