@@ -76,7 +76,9 @@
               action="http://localhost:80/api/hold/imgload"
               class="upload-demo"
               multiple>
-            <el-button size="huge" type="primary" >点击上传生成图像</el-button>
+            <div style="display: table-cell; vertical-align: middle;">
+            <el-button class="slide"  >点击上传生成图像</el-button>
+            </div>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-main>
@@ -286,6 +288,29 @@ export default {
   position: fixed;
   background-size: 100% 100%;
 }
+.slide {
+    border: 2px solid #2980b9;
+    color: #2980b9;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: .5s;
+    text-align: center;
+}
 
+.slide::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 0;
+    height: 100%;
+    left: 0;
+    background-color: #2980b9;
+    transition: ease-in-out .5s;
+}
+
+.slide:hover::before {
+    width: 100%;
+}
 </style>
 

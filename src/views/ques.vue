@@ -66,6 +66,11 @@
               </template>
             </slide>
           </carousel-3d>
+          <el-form >
+
+            <div style="text-align: center;margin-top: 100px"><el-input style="width: 500px"  class="input" v-model="question" type="text" placeholder="请输入您想反馈的问题"/></div>
+            <div style="text-align: center"><el-button  class="btn three-d" v-on:click='feedback' >提交</el-button></div>
+          </el-form>
         </el-main>
       </el-container>
     </el-container>
@@ -74,7 +79,6 @@
 
 <script>
 import {Carousel3d, Slide} from 'vue-carousel-3d'
-import * as path from "path";
 
 export default {
   name: 'Home',
@@ -84,6 +88,7 @@ export default {
   },
   data() {
     return {
+      question:'',
       username: '',
       slides: [
         {
@@ -117,33 +122,64 @@ export default {
     },
     gogh() {
       this.$router.push({
-              path: '/gogh',
-              query: {
-                name: this.username
-              }
+            path: '/gogh',
+            query: {
+              name: this.username
+            }
           }
       )
 
     },
     check() {
       this.$router.push({
-              path: '/check',
-              query: {
-                name: this.username
-              }
+            path: '/check',
+            query: {
+              name: this.username
+            }
           }
       )
 
     },
     ques() {
       this.$router.push({
-              path: '/ques',
-              query: {
-                name: this.username
-              }
+            path: '/ques',
+            query: {
+              name: this.username
+            }
           }
       )
 
+    },
+    feedback(){
+      if(this.question === '') {
+        this.$message.error('反馈内容不能为空');
+      }else{
+        this.axios.post('/feedback', {
+          params: {
+            quest: this.question,
+            username:this.username
+          }
+        }).then(res=>{
+          if(res.data.status == 400) {
+            this.$alert('反馈失败，请重新提交', '反馈失败', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.question = ''
+              }
+            });
+          }
+          else {
+            this.$alert('已收到您的反馈，会尽快解决！', '反馈成功', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.question = ''
+              }
+            });
+          }
+        }).catch(err=>{
+            console.log("反馈失败" + err);
+        })
+      }
     }
   }
 
@@ -220,6 +256,31 @@ export default {
   height: 100%; //大小设置为100%
   position: fixed;
   background-size: 100% 100%;
+}
+.three-d {
+    color: #fff;
+    background-color: #f1c40f;
+    text-shadow: -2px 2px 2px rgb(209 132 0),
+                -2px 2px 2px rgb(209 132 0),
+                -2px 2px 2px rgb(209 132 0),
+                -2px 2px 2px rgb(209 132 0),
+                -2px 2px 2px rgb(209 132 0),
+                -2px 2px 2px rgb(209 132 0);
+    box-shadow: 0px 15px 0px 0px #f39c12;
+    transition: all .5s;
+  min-width: 100px;
+  min-height: 28px;
+  margin-top: 50px;
+
+}
+
+.three-d:hover {
+    background-color: #fcdc5e;
+}
+
+.three-d:active {
+    transform: translate(0,4px);
+    box-shadow: 0px 1px 0px 0px #f39c12;
 }
 
 </style>

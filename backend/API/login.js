@@ -27,6 +27,7 @@ exports.login = (req, res) => {
 exports.register = (req, res) => {
   const sql1 = 'select * from userinfo where username = ?'
   const sql2 = 'insert into userinfo (username, password,email) value (?, ?,?)'
+
   db.query(sql1, [req.body.params.username], (err, data) => {
     if(err) {
       return res.send({
@@ -60,3 +61,20 @@ exports.register = (req, res) => {
   })
 }
 
+exports.feedback = (req, res) => {
+  const sql2 = 'UPDATE userinfo SET ques = ?  WHERE username = ?;'
+  db.query(sql2, [req.body.params.quest , req.body.params.username], (err, data) => {
+    if(err) {
+        return res.send({
+          status: 400,
+          message: "反馈失败，请重新提交"
+        })
+    }
+    else {
+      res.send({
+        status: 200,
+        message: "已收到您的反馈，会尽快解决！"
+      })
+    }
+  })
+}

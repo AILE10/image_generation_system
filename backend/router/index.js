@@ -5,6 +5,7 @@ const multer = require('multer')
 const fs = require('fs')
 router.get('/login', login.login)
 router.post('/register', login.register)
+router.post('/feedback', login.feedback)
 //图片上传
 router.post(
     "/api/hold/imgload",
